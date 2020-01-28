@@ -1,0 +1,1 @@
+sudo ./gor --input-raw :8080 --input-raw-bpf-filter "dst host 172.19.0.3 and dst port 8080" --output-stdout

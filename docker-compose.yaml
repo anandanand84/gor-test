@@ -1,0 +1,12 @@
+version: '3.0'
+services:
+    server:
+        image: "anandanand84/gor-test-server"
+    client:
+        image: "anandanand84/gor-test-client"
+    gor:
+        image: "anandanand84/goreplay"
+        command : '--input-raw :8080 --input-raw-bpf-filter "dst host servers and dst port 8080" --output-stdout'
+    ubuntu:
+        image: "ubuntu"
+        command: tail -f /dev/null

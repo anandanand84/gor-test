@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gor-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+  selector:
+    app: gor
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.16.0 (0c01309)
+  creationTimestamp: null
+  labels:
+    app: gor
+  name: gor
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: gor
+    spec:
+      containers:
+      - name: server
+        image: anandanand84/gor-test-server
+        resources: {}
+        ports:
+          - containerPort: 8080
+      - name: gor
+        image: anandanand84/goreplay
+        resources: {}
+        args:
+          - --input-raw
+          - :8080
+          - --output-stdout
+          - --input-raw-track-respons
+          - --input-raw-realip-header 
+          - "X-Real-IP"
+          - --output-http 
+          - "http://staging.com"
+      restartPolicy: Always
+status: {}
